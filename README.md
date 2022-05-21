@@ -8,7 +8,10 @@ that tend to see a fair amount of delicate tweaking.
 
 ### GCP Minecraft Bedrock Server
 A dockerized Minecraft Bedrock server running on GCP. Cheap and easy to control.
+
 ### GCP Minecraft Java Server
+A big thanks to [Tom Larkworthy](https://futurice.com/blog/friends-and-family-minecraft-server-terraform-recipe) for sharing his work with GCP and terraform file.
+
 Our kid - as of this writing, 8-years-old - is heavily into Minecraft. He asked that I set up a server for
 him and his friends. I looked at hosting options; there are many. I wanted to control cost as well as be a
 bit lazy and deal with the administrative hassles of administering a full Linux system. Give me Docker or
@@ -18,7 +21,7 @@ The Java edition of Minecraft was my first attempt at getting a working set up. 
 the Bedrock version of the server for game consoles such as the Nintendo Switch or XBox to successfully 
 log in.
 
-This works! But I quickly iterated and was able to reuse this to work with Bedrock
+This works! But I quickly iterated and was able to reuse this to work with Bedrock.
 
 ### Robot Plant
 
