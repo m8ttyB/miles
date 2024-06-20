@@ -29,7 +29,7 @@ Features
 terraform {
   backend "gcs" {
     prefix = "minecraft/state"
-    bucket = "<bucket_name>"
+    bucket = "mc_java_bucket"
   }
 }
 
@@ -40,15 +40,15 @@ terraform {
 #   terraform apply
 locals {
   # The Google Cloud Project ID that will host and pay for your Minecraft server
-  project = "<project_id>"
+  project = "mq-minecraft-java"
   region  = "us-west1"
   zone    = "us-west1-a"
   # Allow members of an external Google group to turn on the server
   # through the Cloud Console mobile app or https://console.cloud.google.com
   # Create a group at https://groups.google.com/forum/#!creategroup
   # and invite members by their email address.
-  enable_switch_access_group = 1
-  minecraft_switch_access_group = "<group_name>@googlegroups.com"
+  # enable_switch_access_group = 1
+  # minecraft_switch_access_group = "groups.google.com/g/mq-minecraft-friends"
 }
 
 
@@ -65,8 +65,9 @@ resource "google_service_account" "minecraft" {
 
 # Permenant Minecraft disk, stays around when VM is off
 resource "google_compute_disk" "minecraft" {
-  name  = "minecraft"
-  type  = "pd-standard"
+  name  = "minecraft-disk"
+  # type  = "pd-standard"
+  type  = "pd-ssd"
   size = 35
   zone  = local.zone
   image = "cos-cloud/cos-stable"
@@ -92,7 +93,7 @@ resource "google_compute_instance" "minecraft" {
   #  docker exec -i mc rcon-cli
   # Once in rcon-cli you can "op <player_id>" to make someone an operator (admin)
   # Use 'sudo journalctl -u google-startup-scripts.service' to retrieve the startup script output
-  metadata_startup_script = "docker run -e EULA=TRUE -e MEMORY=3G -d -p 25565:25565 -v /var/minecraft:/data --name mc itzg/minecraft-server:latest;"
+  metadata_startup_script = "docker run mc; docker run -e EULA=TRUE -e MEMORY=3G -d -p 25565:25565 -v /var/minecraft:/data --name mc itzg/minecraft-server:latest;"
 
   metadata = {
     enable-oslogin = "TRUE"
@@ -149,39 +150,39 @@ resource "google_compute_firewall" "minecraft" {
   target_tags   = ["minecraft"]
 }
 
-resource "google_project_iam_custom_role" "minecraftSwitcher" {
-  role_id     = "MinecraftSwitcher"
-  title       = "Minecraft Switcher"
-  description = "Can turn a VM on and off"
-  permissions = ["compute.instances.start", "compute.instances.stop", "compute.instances.get"]
-}
+# resource "google_project_iam_custom_role" "minecraftSwitcher" {
+#   role_id     = "MinecraftSwitcher"
+#   title       = "Minecraft Switcher"
+#   description = "Can turn a VM on and off"
+#   permissions = ["compute.instances.start", "compute.instances.stop", "compute.instances.get"]
+# }
 
-resource "google_project_iam_custom_role" "instanceLister" {
-  role_id     = "InstanceLister"
-  title       = "Instance Lister"
-  description = "Can list VMs in project"
-  permissions = ["compute.instances.list"]
-}
+# resource "google_project_iam_custom_role" "instanceLister" {
+#   role_id     = "InstanceLister"
+#   title       = "Instance Lister"
+#   description = "Can list VMs in project"
+#   permissions = ["compute.instances.list"]
+# }
 
-resource "google_compute_instance_iam_member" "switcher" {
-  count = local.enable_switch_access_group
-  project = local.project
-  zone = local.zone
-  instance_name = google_compute_instance.minecraft.name
-  role = google_project_iam_custom_role.minecraftSwitcher.id
-  member = "group:${local.minecraft_switch_access_group}"
-}
+# resource "google_compute_instance_iam_member" "switcher" {
+#   count = local.enable_switch_access_group
+#   project = local.project
+#   zone = local.zone
+#   instance_name = google_compute_instance.minecraft.name
+#   role = google_project_iam_custom_role.minecraftSwitcher.id
+#   member = "group:${local.minecraft_switch_access_group}"
+# }
 
-resource "google_project_iam_member" "projectBrowsers" {
-  count = local.enable_switch_access_group
-  project = local.project
-  role    = "roles/browser"
-  member  = "group:${local.minecraft_switch_access_group}"
-}
+# resource "google_project_iam_member" "projectBrowsers" {
+#   count = local.enable_switch_access_group
+#   project = local.project
+#   role    = "roles/browser"
+#   member  = "group:${local.minecraft_switch_access_group}"
+# }
 
-resource "google_project_iam_member" "computeViewer" {
-  count = local.enable_switch_access_group
-  project = local.project
-  role    = google_project_iam_custom_role.instanceLister.id
-  member  = "group:${local.minecraft_switch_access_group}"
-}
+# resource "google_project_iam_member" "computeViewer" {
+#   count = local.enable_switch_access_group
+#   project = local.project
+#   role    = google_project_iam_custom_role.instanceLister.id
+#   member  = "group:${local.minecraft_switch_access_group}"
+# }
