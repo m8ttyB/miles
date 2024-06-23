@@ -93,7 +93,7 @@ resource "google_compute_instance" "minecraft" {
   #  docker exec -i mc rcon-cli
   # Once in rcon-cli you can "op <player_id>" to make someone an operator (admin)
   # Use 'sudo journalctl -u google-startup-scripts.service' to retrieve the startup script output
-  metadata_startup_script = "docker run mc; docker run -e EULA=TRUE -e MEMORY=3G -d -p 25565:25565 -v /var/minecraft:/data --name mc itzg/minecraft-server:latest;"
+  metadata_startup_script = "[ \\\"$(docker ps -a -q -f name=mc)\\\" ] && docker rm -f mc && docker run -e EULA=TRUE -e MEMORY=3G -d -p 25565:25565 -v /var/minecraft:/data --name mc itzg/minecraft-server:latest || docker run -e EULA=TRUE -e MEMORY=3G -d -p 25565:25565 -v /var/minecraft:/data --name mc itzg/minecraft-server:latest"
 
   metadata = {
     enable-oslogin = "TRUE"
