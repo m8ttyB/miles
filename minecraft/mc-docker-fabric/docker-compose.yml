@@ -12,7 +12,7 @@ services:
       EULA: "TRUE"
       TYPE: "FABRIC"
       VERSION: 1.21.4 #LATEST
-      # CP_API_KEY, escape the api key with a prepended $.
+      # CP_API_KEY, escape the api key with a prepended $
       CF_API_KEY: '$<api-key>' 
       CF_PAGE_URL: https://www.curseforge.com/minecraft/modpacks/custom-survival-by-3d/files/5971692
     restart: unless-stopped
