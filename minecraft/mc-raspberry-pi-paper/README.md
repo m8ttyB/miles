@@ -99,7 +99,7 @@ java -Xms512M -Xmx2048M -jar paper.jar nogui
 ```
 
 ## Configure as a System Service (Auto-Start)
-We’ll set up a service that, when started, launches Minecraft in a **detached screen session** named `minecraft`. This approach lets you attach to the server console at will.
+We’ll set up a service that, when started, launches Minecraft in a detached screen session named `minecraft`. This approach lets you attach to the server console at will.
 ### Create a Service File
 ```bash
 sudo vim /etc/systemd/system/minecraft.service
@@ -128,9 +128,9 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
-- **User**: Replace `pi` with the user that owns the Minecraft folder if different.
-- **WorkingDirectory**: Replace `/home/pi/minecraft` with your server directory.
-- **ExecStart**: Adjust `-Xmx` to match your system’s available memory.
+- User -  Replace `pi` with the user that owns the Minecraft folder if different.
+- WorkingDirectory -  Replace `/home/pi/minecraft` with your server directory.
+- ExecStart - Adjust `-Xmx` to match your system’s available memory.
 
 ### Reload systemd and Enable Minecraft Service
 This ensures the service starts at every boot.
@@ -179,13 +179,13 @@ sudo systemctl restart minecraft
 systemctl status minecraft
 ```
 Within `screen`:
-- **In-game commands**: Type them in the screen console (e.g., `op <username>`, `help`, `save-all`, etc.).
-- **Detach**: `Ctrl + A`, then `D` (server keeps running).
+- In-game commands - Type them in the screen console (e.g., `op <username>`, `help`, `save-all`, etc.).
+- Detach -  `Ctrl + A`, then `D` (server keeps running).
 
 ## Tips and Notes
-- **Memory Allocation**: Adjust `-Xms` and `-Xmx` in `ExecStart` to suit your Pi’s RAM (e.g., `-Xmx2048M` = 2 GB).
-- **Stopping the Server**: The systemd `ExecStop` automatically sends the `stop` command to the server console.
-- **Logs**: Standard server logs remain in the `logs/` folder. You can also check service logs with:
+- Memory Allocation -  Adjust `-Xms` and `-Xmx` in `ExecStart` to suit your Pi’s RAM (e.g., `-Xmx2048M` = 2 GB).
+- Stopping the Server The systemd `ExecStop` automatically sends the `stop` command to the server console.
+- Logs -  Standard server logs remain in the `logs/` folder. You can also check service logs with:
 ```bash
 journalctl -u minecraft -f
 ```
