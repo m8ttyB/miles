@@ -19,12 +19,6 @@ locals {
   project = "mq-minecraft-java"
   region  = "us-west1"
   zone    = "us-west1-a"
-  # Allow members of an external Google group to turn on the server
-  # through the Cloud Console mobile app or https://console.cloud.google.com
-  # Create a group at https://groups.google.com/forum/#!creategroup
-  # and invite members by their email address.
-  # enable_switch_access_group = 1
-  # minecraft_switch_access_group = "groups.google.com/g/mq-minecraft-friends"
 }
 
 
