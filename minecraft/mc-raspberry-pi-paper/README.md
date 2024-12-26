@@ -1,5 +1,7 @@
 # PaperMC on Raspberry Pi
 
+Adapted from [Raspberry Pi 4 PaperMC Minecraft Server (RpiOS Lite)](https://www.instructables.com/Raspberry-Pi-4-PaperMC-Minecraft-Server-RpiOS-Lite/)
+
 ## Overview
 This README provides step-by-step instructions for installing and running a [PaperMC](https://papermc.io/) Minecraft server on a Raspberry Pi running a 64-bit OS (arm64). It includes:
 - Installing required packages
